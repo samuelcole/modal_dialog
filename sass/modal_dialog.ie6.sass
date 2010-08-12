@@ -1,0 +1,17 @@
+div.modal_dialog
+  :position absolute
+  // removeExpression() doesn't work, so we have to do this in JS
+  //:top expression(eval(document.documentElement.scrollTop))
+  //:height expression(eval(document.documentElement.clientHeight))
+  :background-image none
+
+div.modal_dialog_ie6_background
+  :position absolute
+  :width 100%
+  :height 100%
+  :z-index -1
+  :background-image url(/images/empty.gif)
+  :filter progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/dialog-overlay.png', sizingMethod='scale')
+
+div.modal_dialog_inner
+  :height 0

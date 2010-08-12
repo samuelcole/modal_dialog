@@ -1,0 +1,17 @@
+-# Required variables:
+-# - html_id: HTML ID (for selecting, not styling)
+-# - header: what to display in the dialog's header (e.g.,
+-#           "Hello<span>!</span>")
+-# Optional variables
+-# - options: [empty for now]
+.modal_dialog{:style => 'display: none;', :id => html_id}
+  .modal_dialog_ie6_background
+  .modal_dialog_outer
+    .modal_dialog_sizer
+      .modal_dialog_inner
+        .modal_dialog_head<
+          %h4>= header
+          %a.modal_dialog_close{:href => '#'}> Close
+        .modal_dialog_body
+          = yield
+      %span.modal_dialog_ie_hack
