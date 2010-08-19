@@ -73,6 +73,55 @@ $.fn.modal_dialog = function(options) {
 	});
 };
 
+// Map of seen remote dialogs to their ModalDialog objects
+window.seen_remote_urls = {};
+
+function return_modal_dialog_from_remote(remote_url, options) {
+  var md;
+
+  $.each(window.seen_remote_urls, function(seen_url) {
+    if(url_equals(remote_url, seen_url)) {
+      md = this;
+    }
+  });
+
+  if(!md) {
+    var $modal = $('<div class="modal_dialog" style="display: none;">' +
+      '<div class="modal_dialog_ie6_background"></div>' +
+      '<div class="modal_dialog_outer">' +
+        '<div class="modal_dialog_sizer">' +
+          '<div class="modal_dialog_head">' +
+            '<a class="modal_dialog_close" href="#">Close</a>' +
+          '</div>' +
+          '<div class="modal_dialog_body">' +
+          'spinner' +
+          '</div>' +
+          '<span class="modal_dialog_ie_hack"></span>' +
+        '</div>' +
+      '</div>' +
+    '</div>');
+
+    $('body').append($modal);
+
+    md = new ModalDialog($modal, options);
+    
+    $.get(remote_url, function(data) {
+      contents = data;
+      $modal.find('.modal_dialog_body').html(contents);
+    });
+
+    window.seen_remote_urls[remote_url] = md;
+  }
+
+  return md;
+}
+
+$.open_remote_modal_dialog = function(remote_url, options) {
+	options = options || {};
+  md = return_modal_dialog_from_remote(remote_url, options);
+  md.open(options.event);
+};
+
 function ModalDialog($elem, options) {
 	this.$elem = $elem;
 

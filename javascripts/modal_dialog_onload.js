@@ -1,3 +1,5 @@
+$(function() {
+
 /*
  * For a <div class="modal_dialog" id="some_funky_dialog">, ensure that every
  * <a href="link_to_some_funky_dialog"> calls modal_dialog() on it.
@@ -11,6 +13,11 @@ $('.modal_dialog').each(function() {
 	});
 });
 
+$('a.remote_modal_dialog').live('click', function(e) {
+  e.preventDefault();
+  $.open_remote_modal_dialog($(this).attr('href'));
+});
+
 /*
  * If the page was loaded at hash "#modal_dialog:whatever_modal_dialog", open
  * that modal dialog.
@@ -22,3 +29,5 @@ if (hash_match) {
 	$('#' + dialog_id).modal_dialog();
 	window.location.hash = '#';
 }
+
+});
