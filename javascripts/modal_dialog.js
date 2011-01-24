@@ -13,7 +13,9 @@
  *   <div class="modal_dialog_outer">
  *     <div class="modal_dialog_sizer">
  *       <div class="modal_dialog_inner">
+ *         <div class="modal_dialog_content">
  *         ...dialog contents ...
+ *         </div>
  *       </div>
  *       <span class="modal_dialog_ie_hack"></span>
  *     </div>
@@ -76,6 +78,41 @@ $.fn.modal_dialog = function(options) {
 // Map of seen remote dialogs to their ModalDialog objects
 window.seen_remote_urls = {};
 
+$.create_modal_dialog = function(title, body, options) {
+  if(title.length) {
+    //we don't want to create an empty h4 if there is no title
+    title = '<h4>' + title + '</h4>';
+  }
+  var $modal = $('<div class="modal_dialog" style="display: none;">' +
+    '<div class="modal_dialog_ie6_background"></div>' +
+    '<div class="modal_dialog_outer">' +
+      '<div class="modal_dialog_sizer">' +
+        '<div class="modal_dialog_inner">' +
+          '<div class="modal_dialog_content">' +
+            '<div class="modal_dialog_head">' +
+              title +
+              '<a class="modal_dialog_close" href="#"><span class="icon-x">Close</span></a>' +
+            '</div>' +
+            '<div class="modal_dialog_body">' +
+            body +
+            '</div>' +
+          '</div>' +
+        '</div>'+
+        '<span class="modal_dialog_ie_hack"></span>' +
+      '</div>' +
+    '</div>' +
+  '</div>');
+
+  $('body').append($modal);
+
+  md = new ModalDialog($modal, options);
+
+  $modal.data('modal_dialog', md);
+
+  return $modal;
+};
+
+
 function return_modal_dialog_from_remote(remote_url, options) {
   var md;
 
@@ -86,29 +123,28 @@ function return_modal_dialog_from_remote(remote_url, options) {
   });
 
   if(!md) {
-    var $modal = $('<div class="modal_dialog" style="display: none;">' +
-      '<div class="modal_dialog_ie6_background"></div>' +
-      '<div class="modal_dialog_outer">' +
-        '<div class="modal_dialog_sizer">' +
-          '<div class="modal_dialog_head">' +
-            '<a class="modal_dialog_close" href="#">Close</a>' +
-          '</div>' +
-          '<div class="modal_dialog_body">' +
-          'spinner' +
-          '</div>' +
-          '<span class="modal_dialog_ie_hack"></span>' +
-        '</div>' +
-      '</div>' +
-    '</div>');
-
-    $('body').append($modal);
-
-    md = new ModalDialog($modal, options);
+    var $modal = $.create_modal_dialog(options.title || '', 'spinner', options);
+    $modal.addClass('spinning');
+    md = $modal.data('modal_dialog');
     
-    $.get(remote_url, function(data) {
-      contents = data;
-      $modal.find('.modal_dialog_body').html(contents);
+    md.remote_xhr = $.ajax({
+      url: remote_url,
+      type: 'get',
+      dataType: options.dataType,
+      beforeSend: options.beforeSend,
+      success: function(data) {
+        contents = data;
+        $modal.find('.modal_dialog_body').html(contents);
+        $modal.removeClass('spinning');
+        $modal.trigger('modal_dialog:remote_dialog_loaded');
+      },
+      error: function() {
+        $modal.remove();
+        delete window.seen_remote_urls[remote_url];
+      }
     });
+
+    md.remote_url = remote_url;
 
     window.seen_remote_urls[remote_url] = md;
   }
@@ -120,7 +156,9 @@ $.open_remote_modal_dialog = function(remote_url, options) {
 	options = options || {};
   md = return_modal_dialog_from_remote(remote_url, options);
   md.open(options.event);
+  return md;
 };
+
 
 function ModalDialog($elem, options) {
 	this.$elem = $elem;
