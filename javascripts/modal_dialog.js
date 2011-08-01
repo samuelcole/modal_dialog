@@ -129,9 +129,11 @@
       '</div>' +
       '</div>'),
 
-      md = new ModalDialog($modal, options);
+      md;
 
     $('body').append($modal);
+
+    md = new ModalDialog($modal, options);
 
     $modal.data('modal_dialog', md);
 
@@ -370,3 +372,4 @@
   });
 
 }(jQuery));
+
