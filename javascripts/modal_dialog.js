@@ -146,7 +146,7 @@
       $modal = $([]);
 
     $.each(window.seen_remote_urls, function (seen_url) {
-      if (url_equals(remote_url, seen_url)) {
+      if (url_equals(remote_url, seen_url, {include_query: true})) {
         md = this;
       }
     });
