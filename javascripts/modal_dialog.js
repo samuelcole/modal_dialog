@@ -1,68 +1,68 @@
 (function ($) {
+  /*
+   * Makes a link open a modal dialog.
+   *
+   * The HTML must look like this:
+   *
+   * <a class="modal_dialog_invoker" href="/fallback/when/no/js">
+   *   Click here to open a dialog
+   * </a>
+   * <div class="modal_dialog" style="display: none;">
+   *   <div class="modal_dialog_ie6_background"></div>
+   *   <div class="modal_dialog_outer">
+   *     <div class="modal_dialog_sizer">
+   *       <div class="modal_dialog_inner">
+   *         <div class="modal_dialog_content">
+   *         ...dialog contents ...
+   *         </div>
+   *       </div>
+   *       <span class="modal_dialog_ie_hack"></span>
+   *     </div>
+   *   </div>
+   * </div>
+   *
+   * (Yes, all those divs are truly necessary for cross-browser styling.)
+   *
+   * Then, make this link into a modal dialog like this:
+   *
+   * $('a.modal_dialog_invoker').click(function() {
+   *   $(this).next('div.modal_dialog').modal_dialog();
+   * });
+   *
+   * When modal_dialog() is called, the element will be moved to the end of
+   * the <body>.
+   *
+   * All styling and event handling are beyond the scope of this module. For
+   * instance, to position the dialog, set CSS styles on its <div> element; to
+   * set a transparent overlay on the entire page excepting the dialog, write
+   * the outer and inner <div>s and position them through CSS. Ideally, your
+   * site will have some generic "dialog" HTML which will surround all
+   * dialogs.
+   *
+   * EVENTS
+   * - close.modal_dialog: when called on the <div> above, will close the
+   *                       dialog.
+   * - modal_dialog:opened: called when the <div> above is opened. Passed the
+   *                        "event" argument (see OPTIONS).
+   * - before_close.modal_dialog: called before the <div> above is closed. Passed the
+   *                        "event" argument (see OPTIONS).
+   * - closed.modal_dialog: called when the <div> above is closed. Passed the
+   *                        "event" argument (see OPTIONS).
+   * - prevent_close.modal_dialog: when called on the <div> above, hides the
+   *                               "close" link and prevents closing.
+   * - allow_close.modal_dialog: reverts the effects of prevent_close.
+   *
+   * OPTIONS
+   * - close_link: element(s) which, when clicked, should close the dialog.
+   *               defaults to all "a.modal_dialog_close"s in the dialog, plus
+   *               the dialog itself, minus its contents.
+   * - prevent_close: if true, calling close() will not close the modal dialog.
+   * - event: the event which opened this modal dialog.
+   * - scroll_margin: if we are in "scrolling mode" (i.e., the dialog is taller
+   *                  than the screen), margin (in px) to show on the top and
+   *                  bottom of the dialog. (default: 20)
+   */
 
-/*
- * Makes a link open a modal dialog.
- *
- * The HTML must look like this:
- *
- * <a class="modal_dialog_invoker" href="/fallback/when/no/js">
- *   Click here to open a dialog
- * </a>
- * <div class="modal_dialog" style="display: none;">
- *   <div class="modal_dialog_ie6_background"></div>
- *   <div class="modal_dialog_outer">
- *     <div class="modal_dialog_sizer">
- *       <div class="modal_dialog_inner">
- *         <div class="modal_dialog_content">
- *         ...dialog contents ...
- *         </div>
- *       </div>
- *       <span class="modal_dialog_ie_hack"></span>
- *     </div>
- *   </div>
- * </div>
- *
- * (Yes, all those divs are truly necessary for cross-browser styling.)
- *
- * Then, make this link into a modal dialog like this:
- *
- * $('a.modal_dialog_invoker').click(function() {
- *   $(this).next('div.modal_dialog').modal_dialog();
- * });
- *
- * When modal_dialog() is called, the element will be moved to the end of
- * the <body>.
- *
- * All styling and event handling are beyond the scope of this module. For
- * instance, to position the dialog, set CSS styles on its <div> element; to
- * set a transparent overlay on the entire page excepting the dialog, write
- * the outer and inner <div>s and position them through CSS. Ideally, your
- * site will have some generic "dialog" HTML which will surround all
- * dialogs.
- *
- * EVENTS
- * - close.modal_dialog: when called on the <div> above, will close the
- *                       dialog.
- * - modal_dialog:opened: called when the <div> above is opened. Passed the
- *                        "event" argument (see OPTIONS).
- * - before_close.modal_dialog: called before the <div> above is closed. Passed the
- *                        "event" argument (see OPTIONS).
- * - closed.modal_dialog: called when the <div> above is closed. Passed the
- *                        "event" argument (see OPTIONS).
- * - prevent_close.modal_dialog: when called on the <div> above, hides the
- *                               "close" link and prevents closing.
- * - allow_close.modal_dialog: reverts the effects of prevent_close.
- *
- * OPTIONS
- * - close_link: element(s) which, when clicked, should close the dialog.
- *               defaults to all "a.modal_dialog_close"s in the dialog, plus
- *               the dialog itself, minus its contents.
- * - prevent_close: if true, calling close() will not close the modal dialog.
- * - event: the event which opened this modal dialog.
- * - scroll_margin: if we are in "scrolling mode" (i.e., the dialog is taller
- *                  than the screen), margin (in px) to show on the top and
- *                  bottom of the dialog. (default: 20)
- */
   function ModalDialog($elem, options) {
     this.$elem = $elem;
 
