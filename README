@@ -6,6 +6,10 @@ DESCRIPTION
 
 All the rails helpers, sass, haml layouts, and javascript you would ever want to build a sweet modal dialog.
 
+DEPENDENCIES
+jquery - http://jquery.com/
+canonical_url - https://github.com/samuelcole/bodacity-js-util/blob/master/src/canonical_url.js
+
 LICENSE
 
 The Adam Hooper copyfree license:
