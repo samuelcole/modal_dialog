@@ -38,11 +38,15 @@ $(function () {
       }
     );
     $(this).data('modal_dialog', md);
-    md.$elem.bind('modal_dialog:remote_dialog_loaded', function () {
-      if (FB && FB.XFBML) {
-        FB.XFBML.parse();
-      }
-    });
+    /*
+    Uncomment this to support Facebook's XFBML in remote dialogs.
+    
+      md.$elem.bind('modal_dialog:remote_dialog_loaded', function () {
+        if (FB && FB.XFBML) {
+          FB.XFBML.parse();
+        }
+      });
+    */
   });
 
   $('a.modal_dialog_close').live('click', function (e) {
