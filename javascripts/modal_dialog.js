@@ -385,7 +385,11 @@
 
       this._detach();
 
-      this.$elem.hide();
+      if (this.options.do_not_cache) {
+        this.$elem.remove();
+      } else {
+        this.$elem.hide();
+      }
 
       this.$elem.trigger("closed.modal_dialog", [e]);
     }
