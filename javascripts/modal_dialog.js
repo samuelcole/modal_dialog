@@ -327,13 +327,17 @@
         $inner = this.$elem.find('div.modal_dialog_inner');
 
       for (prop in this._elem_original_css) {
-        value = this._elem_original_css[prop];
-        this.$elem.css(prop, value);
+        if (this._elem_original_css.hasOwnProperty(prop)) {
+          value = this._elem_original_css[prop];
+          this.$elem.css(prop, value);
+        }
       }
 
       for (prop in this._inner_original_css) {
-        value = this._inner_original_css[prop];
-        $inner.css(prop, value);
+        if (this._inner_original_css.hasOwnProperty(prop)) {
+          value = this._inner_original_css[prop];
+          $inner.css(prop, value);
+        }
       }
 
       if ($.browser.msie && $.browser.version < '7') {
