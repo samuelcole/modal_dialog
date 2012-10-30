@@ -76,6 +76,7 @@
     this.options = $.extend({
       close_link: $close_link,
       scroll_margin: 20,
+      ignore_parent: false,
       prevent_close: false
     }, options);
 
@@ -84,6 +85,9 @@
       this.$close_a.hide();
     }
 
+    if (!this.options.ignore_parent) {
+      this._bind_parent_modal();
+    }
     this._remember_original_css();
     this._attach();
   }
@@ -230,6 +234,14 @@
       $(window).unbind('resize.modal_dialog');
     },
 
+    _bind_parent_modal: function () {
+      this.$parent_modal = $([]);
+      this.$elem.bind('before_close.modal_dialog', function () {
+        $(this).data('modal_dialog').$parent_modal.show();
+        $(this).data('modal_dialog').$parent_modal = $([]);
+      });
+    },
+
     _on_size_changed: function (opening) {
       var $inner = this.$elem.find('div.modal_dialog_inner');
       if ($inner.height() > this._get_viewport_height()) {
@@ -347,6 +359,12 @@
       if ($body.length) {
         $body.append(this.$elem);
       }
+
+      if (!this.options.ignore_parent) {
+        this.$parent_modal = $('.modal_dialog:visible');
+        this.$parent_modal.hide();
+      }
+
       this.$elem.show();
       this._on_size_changed(true);
 
