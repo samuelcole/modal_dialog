@@ -108,6 +108,8 @@
   window.seen_remote_urls = {};
 
   $.create_modal_dialog = function (title, body, options) {
+    options = options || {};
+
     if (title.length) {
       //we don't want to create an empty h4 if there is no title
       title = '<h4>' + title + '</h4>';
