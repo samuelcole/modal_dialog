@@ -177,7 +177,9 @@
 
       md.remote_url = remote_url;
 
-      window.seen_remote_urls[remote_url] = md;
+      if (!options.do_not_cache) {
+        window.seen_remote_urls[remote_url] = md;
+      }
     }
 
     return md;
