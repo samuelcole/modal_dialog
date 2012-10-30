@@ -402,5 +402,34 @@
     }
   });
 
-}(jQuery));
+  $.modal_confirm = function (callback, options) {
+    var defaults = {
+        message: 'Do you really want to do this?',
+        confirm_text: 'Confirm',
+        cancel_text: 'Cancel',
+        title: 'Are you sure?'
+      },
+      html,
+      $confirm_dialog,
+      md;
 
+    options = $.extend({}, defaults, options);
+    html = "<div style=\"max-width:600px;\">" + options.message + "<p class='clearfix'>" + "<a class='confirm button-neutral left' href='#'>" + options.confirm_text + "</a>" + "<a class='cancel button-space left' href='#'>" + options.cancel_text + "</a></p></div>";
+    $confirm_dialog = $.create_modal_dialog(options.title, html);
+    md = $confirm_dialog.data('modal_dialog');
+
+    $confirm_dialog.find('.cancel').click(function (e) {
+      e.preventDefault();
+      md.close();
+    });
+
+    $confirm_dialog.find('.confirm').click(function (e) {
+      e.preventDefault();
+      callback();
+      md.close();
+    });
+
+    md.open();
+  };
+
+}(jQuery));
