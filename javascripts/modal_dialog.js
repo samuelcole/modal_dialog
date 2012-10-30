@@ -176,6 +176,7 @@
           $modal.trigger('modal_dialog:remote_dialog_loaded');
         },
         error: function () {
+          $modal.trigger('modal_dialog:errored', arguments);
           $modal.remove();
           delete window.seen_remote_urls[remote_url];
         }
