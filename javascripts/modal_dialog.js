@@ -155,7 +155,7 @@
       $modal = $.create_modal_dialog(options.title || '', 'spinner', options);
       $modal.addClass('spinning');
       md = $modal.data('modal_dialog');
-      
+
       md.remote_xhr = $.ajax({
         url: remote_url,
         type: 'get',
@@ -201,10 +201,11 @@
       var _this = this,
         $close_link = $(this.options.close_link);
 
+
       this.$elem.bind('close.modal_dialog', function () { _this.close(); });
       this.$elem.bind('size_change.modal_dialog', function () { _this._on_size_changed(); });
-      this.$elem.bind('prevent_close.modal_dialog', function (e) { _this._set_prevent_close(true); });
-      this.$elem.bind('allow_close.modal_dialog', function (e) { _this._set_prevent_close(false); });
+      this.$elem.bind('prevent_close.modal_dialog', function () { _this._set_prevent_close(true); });
+      this.$elem.bind('allow_close.modal_dialog', function () { _this._set_prevent_close(false); });
       $(window).bind('resize.modal_dialog', function () { _this._on_size_changed(); });
 
       $close_link.bind('click.modal_dialog', function (e) {
@@ -282,7 +283,6 @@
       this._inner_original_css = {};
 
       var $inner = this.$elem.find('div.modal_dialog_inner'),
-        i,
         elem_props = ['position', 'top'],
         inner_props = ['margin-top', 'margin-bottom'],
         _this = this;
@@ -343,6 +343,7 @@
 
     open: function (e) {
       var $body = this.$elem.parents('body');
+
       if ($body.length) {
         $body.append(this.$elem);
       }
@@ -358,7 +359,6 @@
       if (this.prevent_close) {
         return;
       }
-
       this.$elem.trigger("before_close.modal_dialog", [e]);
 
       if (e && e.isDefaultPrevented()) {
