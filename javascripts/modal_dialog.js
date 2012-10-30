@@ -115,7 +115,7 @@
       title = '<h4>' + title + '</h4>';
     }
 
-    var $modal = $('<div class="modal_dialog" style="display: none;">' +
+    var $modal = $('<div class="modal_dialog"' + (options.id !== undefined ? (' id="' + options.id + '" ') : ' ') + 'style="display: none;">' +
       '<div class="modal_dialog_ie6_background"></div>' +
       '<div class="modal_dialog_outer">' +
         '<div class="modal_dialog_sizer">' +
